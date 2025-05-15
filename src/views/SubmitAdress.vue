@@ -1,11 +1,64 @@
 <script setup>
 // Importing the custom SubmitButton component
+import { ref, reactive } from 'vue'
 import SubmitButton from '../components/SubmitButton.vue'
 
+const form = reactive({
+  firstName: '',
+  lastName: '',
+  mobile: '',
+  phone: '',
+  address: '',
+  gender: '',
+})
+
+const errors = reactive({
+  firstName: '',
+  lastName: '',
+  mobile: '',
+  phone: '',
+  address: '',
+  gender: '',
+})
+
+const checkInputs = (fieldName, minChar, label) => {
+  const value = form[fieldName].replace(/\s+/g, '')
+  if (!value) {
+    errors[fieldName] = `لطفا ${label} را وارد کنید`
+  } else if (value.length < minChar) {
+    errors[fieldName] = `${label} باید دارای ${minChar} کاراکتر باشد`
+  } else {
+    errors[fieldName] = ''
+  }
+}
+
+const FormValidation = () => {
+  let isValid = true
+
+  checkInputs('firstName', 3, 'نام')
+  checkInputs('lastName', 3, 'نام خانوادگی')
+  checkInputs('address', 10, 'آدرس')
+  checkInputs('mobile', 11, 'شماره همراه')
+  checkInputs('phone', 10, 'تلفن ثابت')
+
+  // Gender check
+  if (!form.gender) {
+    errors.gender = 'جنسیت را انتخاب کنید'
+    isValid = false
+  } else {
+    errors.gender = ''
+  }
+}
+
 // Function to handle form submission logic
+
 const handleSubmit = () => {
-  // Placeholder: Add form validation or submission logic here
-  console.log('Form submitted')
+  if (FormValidation()) {
+    console.log('✅ فرم با موفقیت ارسال شد:', form)
+    // Do something (send to backend, go to next step...)
+  } else {
+    console.log('❌ فرم نامعتبر است')
+  }
 }
 </script>
 
@@ -25,19 +78,43 @@ const handleSubmit = () => {
           <!-- First Name Input -->
           <div class="form-group">
             <label for="first-name" class="form-label">نام</label>
-            <input type="text" id="first-name" placeholder="مثال: محمد رضا" class="form-input" />
+            <input
+              v-model="form.firstName"
+              type="text"
+              id="first-name"
+              class="form-input"
+              :class="{ 'input-error': errors.firstName }"
+              placeholder="مثال: محمد رضا"
+            />
+            <p v-if="errors.firstName" class="error-text">{{ errors.firstName }}</p>
           </div>
 
           <!-- Last Name Input -->
           <div class="form-group">
             <label for="last-name" class="form-label">نام خانوادگی</label>
-            <input type="text" id="last-name" placeholder="مثال: رضایی" class="form-input" />
+            <input
+              v-model="form.lastName"
+              type="text"
+              id="last-name"
+              :class="{ 'input-error': errors.lastName }"
+              placeholder="مثال: رضایی"
+              class="form-input"
+            />
+            <p v-if="errors.lastName" class="error-text">{{ errors.lastName }}</p>
           </div>
 
           <!-- Mobile Phone Input -->
           <div class="form-group">
             <label for="mobile" class="form-label">شماره تلفن همراه</label>
-            <input type="tel" id="mobile" placeholder="مثال: 0912123456789" class="form-input" />
+            <input
+              v-model="form.mobile"
+              type="tel"
+              id="mobile"
+              :class="{ 'input-error': errors.mobile }"
+              placeholder="مثال: 0912123456789"
+              class="form-input"
+            />
+            <p v-if="errors.mobile" class="error-text">{{ errors.mobile }}</p>
           </div>
         </div>
 
@@ -46,18 +123,29 @@ const handleSubmit = () => {
           <!-- Landline Input -->
           <div class="form-group">
             <label for="phone" class="form-label">شماره تلفن ثابت</label>
-            <input type="tel" id="phone" placeholder="مثال: 0211234567" class="form-input" />
+            <input
+              v-model="form.mobile"
+              type="tel"
+              id="phone"
+              :class="{ 'input-error': errors.phone }"
+              placeholder="مثال: 0211234567"
+              class="form-input"
+            />
+            <p v-if="errors.phone" class="error-text">{{ errors.phone }}</p>
           </div>
 
           <!-- Address Input (wider field) -->
           <div class="form-group form-group-large">
             <label for="address" class="form-label">آدرس</label>
             <input
+              v-model="form.address"
               type="text"
               id="address"
+              :class="{ 'input-error': errors.address }"
               placeholder="مثال: خیابان ولیعصر، کوچه ..."
               class="form-input"
             />
+            <p v-if="errors.address" class="error-text">{{ errors.address }}</p>
           </div>
         </div>
 
@@ -69,6 +157,7 @@ const handleSubmit = () => {
               <!-- Female Option -->
               <div class="radio-item">
                 <input
+                  v-model="form.gender"
                   type="radio"
                   value="female"
                   name="gender"
@@ -81,6 +170,7 @@ const handleSubmit = () => {
               <!-- Male Option -->
               <div class="radio-item">
                 <input
+                  v-model="form.gender"
                   type="radio"
                   value="male"
                   name="gender"
@@ -90,6 +180,7 @@ const handleSubmit = () => {
                 <label for="gender-male" class="radio-label">آقا</label>
               </div>
             </div>
+            <span class="error-text">{{ errors.gender }}</span>
           </div>
         </div>
       </form>
@@ -213,6 +304,16 @@ const handleSubmit = () => {
 /* ===== Spacing for Fixed Button Visibility ===== */
 .bottom-spacing {
   height: 80px; /* Match height of the fixed SubmitButton component */
+}
+
+.input-error {
+  border-color: red;
+}
+
+.error-text {
+  color: red;
+  font-size: 0.85rem;
+  margin-top: 4px;
 }
 
 /* ===== Responsive Layout (Tablet & Desktop) ===== */
