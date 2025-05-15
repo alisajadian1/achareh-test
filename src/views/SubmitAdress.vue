@@ -48,6 +48,8 @@ const FormValidation = () => {
   } else {
     errors.gender = ''
   }
+
+  return isValid
 }
 
 // Function to handle form submission logic
@@ -124,7 +126,7 @@ const handleSubmit = () => {
           <div class="form-group">
             <label for="phone" class="form-label">شماره تلفن ثابت</label>
             <input
-              v-model="form.mobile"
+              v-model="form.phone"
               type="tel"
               id="phone"
               :class="{ 'input-error': errors.phone }"
@@ -194,7 +196,7 @@ const handleSubmit = () => {
   </section>
 </template>
 
-<style scoped>
+<style>
 /* ===== Layout and Container Styles ===== */
 .submit-address {
   padding: var(--spacing-large);
@@ -323,10 +325,6 @@ const handleSubmit = () => {
     max-width: 720px;
   }
 
-  .section-title {
-    font-size: 1.75rem;
-  }
-
   .form-row {
     flex-direction: row; /* Arrange inputs side-by-side on wider screens */
   }
@@ -338,7 +336,7 @@ const handleSubmit = () => {
 
 @media (min-width: 992px) {
   .submit-address {
-    max-width: 960px;
+    max-width: 808px;
   }
 
   .input-data-cart {
