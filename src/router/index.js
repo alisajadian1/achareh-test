@@ -11,7 +11,7 @@ const router = createRouter({
       redirect: '/submitaddres', // Redirect home to SubmitAdress
     },
     {
-      path: '/submitaddres',
+      path: '/submitaddress',
       name: 'SubmitAdress',
       component: SubmitAdress,
     },
@@ -20,11 +20,16 @@ const router = createRouter({
       name: 'SelectOnMap',
       component: () => import('@/components/LocationPicker.vue'),
     },
-    // {
-    //   path: '/submitaddres/submitted',
-    //   name: 'Submitted',
-    //   component: () => import('@/components/Submitted.vue'),
-    // },
+    {
+      path: '/submitaddress/success',
+      name: 'AddressSuccess',
+      component: () => import('@/components/AddressSubmitSuccess.vue'),
+    },
+    {
+      path: '/savedaddresses',
+      name: 'savedaddress',
+      component: () => import('@/views/SavedAddresses.vue'),
+    },
   ],
 })
 

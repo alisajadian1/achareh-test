@@ -9,6 +9,10 @@ defineProps({
     type: Boolean,
     default: false,
   },
+  fixed: {
+    type: Boolean,
+    default: true,
+  },
 })
 
 // You can define emits if needed
@@ -20,9 +24,9 @@ const handleClick = () => {
 </script>
 
 <template>
-  <div class="fixed-button-container">
-    <div class="fixed-button-wrapper">
-      <button class="fixed-button" :disabled="disabled" @click="handleClick">
+  <div :class="fixed ? 'fixed-button-container' : 'button-container'">
+    <div class="button-wrapper">
+      <button class="base-button" :disabled="disabled" @click="handleClick">
         {{ text }}
       </button>
     </div>
@@ -40,19 +44,37 @@ const handleClick = () => {
   background-color: var(--color-white);
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
   z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.fixed-button-wrapper {
-  text-align: center;
+.button-container {
+  width: 100%;
+  height: 84px;
+  background-color: var(--color-white);
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.button-wrapper {
   padding: var(--spacing-medium);
+  width: 100%;
   max-width: 100%;
   margin: 0 auto;
+  display: flex;
+  justify-content: center;
 }
 
-.fixed-button {
-  width: 224px;
+.base-button {
+  width: 100%;
   height: 46px;
+  display: flex;
   align-items: center;
+  justify-content: center;
   background-color: var(--color-primary);
   color: var(--color-white);
   border: none;
@@ -64,31 +86,26 @@ const handleClick = () => {
   transition: background-color 0.3s ease;
 }
 
-.fixed-button:hover {
+.base-button:hover {
   background-color: #00a896;
 }
 
-.fixed-button:disabled {
+.base-button:disabled {
   background-color: var(--color-gray);
   cursor: not-allowed;
 }
 
 /* Responsive styles */
 @media (min-width: 768px) {
-  .fixed-button-wrapper {
-    max-width: 224px;
+  .button-wrapper {
+    max-width: 720px;
+    padding: var(--spacing-medium) var(--spacing-large);
   }
 }
 
 @media (min-width: 992px) {
-  .fixed-button-wrapper {
-    max-width: 960px;
-  }
-}
-
-@media (min-width: 1200px) {
-  .fixed-button-wrapper {
-    max-width: 1140px;
+  .button-wrapper {
+    max-width: 224px;
   }
 }
 </style>
