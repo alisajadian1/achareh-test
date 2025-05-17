@@ -27,7 +27,7 @@
       </svg>
     </i>
     <h1 class="success-message">اطلاعات شما با موفقیت ثبت شد</h1>
-    <!-- <SubmitButton :fixed="false" :text="'مشاهده اطلاعات'" class="see-address-button" /> -->
+
     <RouterLink to="/SavedAddresses" class="navigation-link">مشاهده اطلاعات</RouterLink>
   </section>
 </template>
@@ -36,7 +36,7 @@
 body {
   margin: 0;
   padding: 0;
-  overflow: hidden; /* prevent scroll when not needed */
+  overflow: hidden;
   height: 100%;
 }
 
@@ -45,7 +45,7 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh; /* center vertically */
+  height: 100vh;
   text-align: center;
   padding: var(--spacing-large);
 }

@@ -54,8 +54,8 @@
         </svg>
       </i>
       <div class="header-text">
-        <p>ثبت آدرس</p>
-        <p class="see-address">مشاهده آدرس ها</p>
+        <RouterLink to="submitaddress" class="submit-address">ثبت آدرس</RouterLink>
+        <RouterLink to="/savedaddresses" class="see-address">مشاهده آدرس ها</RouterLink>
       </div>
     </div>
   </section>
@@ -68,15 +68,12 @@
   align-items: center;
   width: 100%;
   background-color: var(--color-white);
-  padding: var(--spacing-medium);
+  padding: var(--spacing-small) var(--spacing-large);
 }
 
 .header-text {
   display: flex;
-  font-size: var(--font-size-base);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-text);
-  align-items: flex-start;
+  align-items: center;
   gap: var(--spacing-large);
 }
 
@@ -84,7 +81,22 @@
   display: block;
 }
 
-.see-address {
-  color: var(--color-primary);
+.see-address,
+.submit-address {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  text-decoration: none;
+  color: var(--color-primary); /* or your default color */
+}
+
+.router-link-active,
+.router-link-exact-active {
+  color: var(--color-text) !important;
+}
+
+@media (min-width: 992px) {
+  .header-container {
+    padding: var(--spacing-small) 80px;
+  }
 }
 </style>

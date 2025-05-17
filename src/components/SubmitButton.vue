@@ -1,5 +1,4 @@
 <script setup>
-// You can define props if needed
 defineProps({
   text: {
     type: String,
@@ -15,7 +14,6 @@ defineProps({
   },
 })
 
-// You can define emits if needed
 const emit = defineEmits(['click'])
 
 const handleClick = () => {
