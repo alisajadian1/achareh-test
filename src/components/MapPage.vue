@@ -33,7 +33,7 @@ const goToUserLocation = () => {
       loadMapErr.value = ''
     },
     (err) => {
-      loadMapErr.value = 'دسنرسی به موقعیت مکانی امکان پذیر نیست'
+      loadMapErr.value = 'دسترسی به موقعیت مکانی امکان پذیر نیست'
       setTimeout(() => {
         loadMapErr.value = ''
       }, 2000)
@@ -51,7 +51,7 @@ onMounted(() => {
   })
     .addTo(map)
     .on('tileerror', () => {
-      loadMapErr.valu = 'نقضه بارگزاری نشد، لطفا دوباره تلاش کنید'
+      loadMapErr.value = 'نقشه بارگزاری نشد، لطفا دوباره تلاش کنید'
       console.log('خطا در بارگزاری نقشه')
       setTimeout(() => {
         loadMapErr.value = ''

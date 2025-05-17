@@ -1,10 +1,20 @@
+// 3. MODIFIED FILE: LocationPicker.vue
 <script setup>
 import { ref } from 'vue'
 
 import MapPage from './MapPage.vue'
 import SubmitButton from './SubmitButton.vue'
+import LoadingDots from './LoadingDots.vue'
 
 const emit = defineEmits(['goBack', 'userLocation'])
+
+// Accept isLoading prop from parent
+const props = defineProps({
+  isLoading: {
+    type: Boolean,
+    default: false,
+  },
+})
 
 const goPreviousStep = () => {
   emit('goBack')
@@ -39,28 +49,7 @@ const sendCoordinates = () => {
       <div v-if="showError" class="error-toast">لطفاً ابتدا موقعیت را روی نقشه انتخاب کنید</div>
       <button @click="goPreviousStep" class="step-back">
         <i>
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M4.5 12H19.5"
-              stroke="#323232"
-              stroke-width="1.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-            <path
-              d="M13.5 6L19.5 12L13.5 18"
-              stroke="#323232"
-              stroke-width="1.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
+          <img src="/src/assets/icons/arrow-right.svg" alt="step-back" class="arrow-icon" />
         </i>
       </button>
       <h1 class="section-title">انتخاب موقعیت</h1>
@@ -70,15 +59,21 @@ const sendCoordinates = () => {
       <div class="map-container">
         <h2 class="location-heading">لطفا موقعیت مورد نظر خود را روی نقشه مشخص کنید</h2>
         <div class="map-content">
-          <MapPage @userLocation="updateSelectedLocation" class="map-cart" />
+          <MapPage @userLocation="updateSelectedLocation" class="map-card" />
         </div>
       </div>
     </div>
 
-    <div class="bottom-spacing"></div>
+    <!-- Loading overlay when isLoading is true -->
+    <div v-if="isLoading" class="loading-overlay">
+      <div class="loading-content">
+        <LoadingDots />
+        <span class="loading-text">در حال ثبت اطلاعات...</span>
+      </div>
+    </div>
 
     <!-- Submit Button -->
-    <SubmitButton @click="sendCoordinates"> </SubmitButton>
+    <SubmitButton @click="sendCoordinates" :disabled="isLoading" text="ذخیره آدرس" />
   </section>
 </template>
 
@@ -88,15 +83,12 @@ const sendCoordinates = () => {
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  background-color: var(--color-border);
-  padding-bottom: calc(var(--spacing-large) + 80px);
 }
 
 .header-container {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: var(--spacing-small) var(--spacing-small);
 }
 
 .step-back {
@@ -106,8 +98,16 @@ const sendCoordinates = () => {
   align-items: center;
 }
 
+.arrow-icon {
+  width: 24px;
+  height: 24px;
+  stroke: #323232; /* does not apply to external SVGs */
+  filter: brightness(0) saturate(100%) invert(20%) sepia(0%) saturate(0%) hue-rotate(0deg)
+    brightness(100%) contrast(100%);
+}
+
 .section-title {
-  font-size: 1.25rem;
+  font-size: var(--font-size-large);
   text-align: center;
   flex: 1;
 }
@@ -117,7 +117,6 @@ const sendCoordinates = () => {
   display: flex;
   justify-content: center;
   margin-bottom: var(--spacing-large);
-  height: calc(100vh - 200px);
 }
 
 .map-container {
@@ -141,14 +140,9 @@ const sendCoordinates = () => {
 
 .map-content {
   width: 100%;
-  height: calc(100vh - 200px);
+  height: calc(100vh - 170px);
   position: relative;
   overflow: hidden;
-}
-
-.bottom-spacing {
-  height: 20px;
-  width: 100%;
 }
 
 .error-toast {
@@ -164,6 +158,36 @@ const sendCoordinates = () => {
   font-weight: bold;
   z-index: 200;
   animation: fade 0.3s ease-in-out;
+}
+
+/* Loading overlay styles */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 84px; /* Adjust for button height */
+  background-color: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 150;
+}
+
+.loading-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 8px;
+  padding: 24px 32px;
+}
+
+.loading-text {
+  margin-top: 16px;
+  font-size: var(--font-size-base);
+  color: white;
 }
 
 @keyframes fade {

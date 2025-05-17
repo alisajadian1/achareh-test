@@ -4,7 +4,7 @@
 body {
   font-family: 'Vazirmatn', sans-serif;
 
-  background-color: var(--color-border);
+  background-color: var(--color-background);
   direction: rtl;
 }
 

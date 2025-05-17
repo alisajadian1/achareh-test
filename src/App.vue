@@ -8,8 +8,8 @@ const router = useRouter()
 
 <template>
   <section>
-    <Header></Header>
-    <RouterView></RouterView>
+    <Header />
+    <RouterView />
   </section>
 </template>
 

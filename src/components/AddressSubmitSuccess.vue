@@ -28,7 +28,7 @@
     </i>
     <h1 class="success-message">اطلاعات شما با موفقیت ثبت شد</h1>
 
-    <RouterLink to="/SavedAddresses" class="navigation-link">مشاهده اطلاعات</RouterLink>
+    <RouterLink to="/saved-addresses" class="navigation-link">مشاهده اطلاعات</RouterLink>
   </section>
 </template>
 

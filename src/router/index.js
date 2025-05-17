@@ -8,20 +8,20 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      redirect: '/submitaddress',
+      redirect: '/submit-address',
     },
     {
-      path: '/submitaddress',
+      path: '/submit-address',
       name: 'SubmitAddress',
       component: SubmitAddress,
     },
     {
-      path: '/submitaddress/success',
+      path: '/submit-address/success',
       name: 'AddressSuccess',
       component: () => import('@/components/AddressSubmitSuccess.vue'),
     },
     {
-      path: '/savedaddresses',
+      path: '/saved-addresses',
       name: 'savedaddress',
       component: () => import('@/views/SavedAddresses.vue'),
     },

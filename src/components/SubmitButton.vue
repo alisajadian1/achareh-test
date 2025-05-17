@@ -1,4 +1,6 @@
 <script setup>
+import LoadingDots from './LoadingDots.vue'
+
 defineProps({
   text: {
     type: String,
@@ -25,7 +27,10 @@ const handleClick = () => {
   <div :class="fixed ? 'fixed-button-container' : 'button-container'">
     <div class="button-wrapper">
       <button class="base-button" :disabled="disabled" @click="handleClick">
-        {{ text }}
+        <div v-if="disabled" class="loading-container">
+          <LoadingDots />
+        </div>
+        <span v-else>{{ text }}</span>
       </button>
     </div>
   </div>
@@ -89,8 +94,15 @@ const handleClick = () => {
 }
 
 .base-button:disabled {
-  background-color: var(--color-gray);
+  background-color: var(--color-primary);
   cursor: not-allowed;
+}
+
+.loading-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
 }
 
 /* Responsive styles */

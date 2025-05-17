@@ -18,7 +18,7 @@ import BaseInput from '@/components/BaseInput.vue'
 
 const router = useRouter()
 const step = ref(1)
-const isSubmitted = ref(false)
+const submitAttempt = ref(false)
 const isLoading = ref(false)
 
 const form = reactive({
@@ -59,7 +59,7 @@ const submitForm = async () => {
       },
     })
     console.log('اطلاعات با موفقیت ارسال شد', res.data)
-    router.push('/submitaddress/success')
+    router.push('/submit-address/success')
   } catch (err) {
     console.error('❌ ارسال فرم با خطا مواجه شد', err)
   } finally {
@@ -96,7 +96,7 @@ const errors = computed(() => ({
 }))
 
 const handleSubmit = () => {
-  isSubmitted.value = true
+  submitAttempt.value = true
   const actualErrors = Object.values(errors.value).filter(Boolean)
   if (actualErrors.length === 0) {
     step.value = 2
@@ -126,7 +126,7 @@ const handleSubmit = () => {
               label="نام"
               placeholder="مثال: محمد رضا"
               :error="errors.firstName"
-              :showError="isSubmitted"
+              :showError="submitAttempt"
             />
 
             <BaseInput
@@ -135,7 +135,7 @@ const handleSubmit = () => {
               label="نام خانوادگی"
               placeholder="مثال: رضایی"
               :error="errors.lastName"
-              :showError="isSubmitted"
+              :showError="submitAttempt"
             />
 
             <BaseInput
@@ -143,9 +143,9 @@ const handleSubmit = () => {
               id="mobile"
               type="tel"
               label="شماره تلفن همراه"
-              placeholder="مثال: 0912123456789"
+              placeholder="مثال: 09121234567"
               :error="errors.mobile"
-              :showError="isSubmitted"
+              :showError="submitAttempt"
             />
           </div>
 
@@ -157,9 +157,9 @@ const handleSubmit = () => {
               id="phone"
               type="tel"
               label="شماره تلفن ثابت"
-              placeholder="مثال: 0211234567"
+              placeholder="مثال: 02112345678"
               :error="errors.phone"
-              :showError="isSubmitted"
+              :showError="submitAttempt"
             />
 
             <div class="form-group form-group-large">
@@ -169,7 +169,7 @@ const handleSubmit = () => {
                 label="آدرس"
                 placeholder="مثال: خیابان ولیعصر، کوچه ..."
                 :error="errors.address"
-                :showError="isSubmitted"
+                :showError="submitAttempt"
               />
             </div>
           </div>
@@ -180,31 +180,35 @@ const handleSubmit = () => {
               <span class="form-label">جنسیت</span>
               <div class="radio-group">
                 <div class="radio-item">
-                  <input
-                    v-model="form.gender"
-                    type="radio"
-                    value="female"
-                    name="gender"
-                    id="gender-woman"
-                    class="radio-input"
-                  />
-                  <label for="gender-woman" class="radio-label">خانم</label>
+                  <label for="gender-woman" class="radio-label">
+                    <input
+                      v-model="form.gender"
+                      type="radio"
+                      value="female"
+                      name="gender"
+                      id="gender-woman"
+                      class="radio-input"
+                    />
+                    خانم
+                  </label>
                 </div>
 
                 <div class="radio-item">
-                  <input
-                    v-model="form.gender"
-                    type="radio"
-                    value="male"
-                    name="gender"
-                    id="gender-male"
-                    class="radio-input"
-                  />
-                  <label for="gender-male" class="radio-label">آقا</label>
+                  <label for="gender-male" class="radio-label">
+                    <input
+                      v-model="form.gender"
+                      type="radio"
+                      value="male"
+                      name="gender"
+                      id="gender-male"
+                      class="radio-input"
+                    />
+                    آقا
+                  </label>
                 </div>
               </div>
               <p
-                v-if="isSubmitted && errors.gender"
+                v-if="submitAttempt && errors.gender"
                 class="error-text"
                 style="color: red; font-size: 10px; margin-top: 4px"
               >
@@ -221,7 +225,11 @@ const handleSubmit = () => {
     </div>
 
     <div id="step-2" v-if="step === 2">
-      <LocationPicker @goBack="step = 1" @userLocation="updateCoordinates" />
+      <LocationPicker
+        @goBack="step = 1"
+        @userLocation="updateCoordinates"
+        :is-loading="isLoading"
+      />
     </div>
   </section>
 </template>
@@ -282,13 +290,15 @@ const handleSubmit = () => {
 /* ===== Gender Radio Buttons ===== */
 .form-group-radio {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: center;
 }
 
 .radio-group {
   display: flex;
   gap: var(--spacing-large);
   margin-top: var(--spacing-small);
+  margin-right: var(--spacing-large);
 }
 
 .radio-item {
@@ -298,10 +308,12 @@ const handleSubmit = () => {
 
 .radio-input {
   margin-left: var(--spacing-small);
-  accent-color: var(--color-primary); /* Custom primary color for radio button */
+  margin-right: var(--spacing-small);
+  accent-color: var(--color-primary);
 }
-
 .radio-label {
+  display: flex;
+  align-items: center;
   font-size: var(--font-size-base);
   color: var(--color-text);
 }
