@@ -1,9 +1,9 @@
 <template>
   <section>
     <div class="header-container">
-      <i class="logo-icon">
+      <RouterLink to="/" class="logo-icon">
         <img src="/achareh-logo.svg" alt="" />
-      </i>
+      </RouterLink>
       <div class="header-text">
         <RouterLink to="submit-address" class="submit-address">ثبت آدرس</RouterLink>
         <RouterLink to="/saved-addresses" class="see-address">مشاهده آدرس ها</RouterLink>
@@ -20,6 +20,7 @@
   width: 100%;
   background-color: var(--color-white);
   padding: var(--spacing-small) var(--spacing-large);
+  box-shadow: 2px 1px 5px 0px rgba(0, 0, 0, 0.2);
 }
 
 .header-text {
