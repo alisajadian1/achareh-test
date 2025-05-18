@@ -47,7 +47,6 @@ const sendCoordinates = () => {
 <template>
   <section class="map-page-wrapper">
     <div class="header-container">
-      <div v-if="showError" class="error-toast">لطفاً ابتدا موقعیت را روی نقشه انتخاب کنید</div>
       <button @click="goPreviousStep" class="step-back">
         <i>
           <img src="/src/assets/icons/arrow-right.svg" alt="step-back" class="arrow-icon" />
@@ -57,6 +56,8 @@ const sendCoordinates = () => {
     </div>
 
     <div class="map-wrapper">
+      <div v-if="showError" class="error-toast">لطفاً ابتدا موقعیت را روی نقشه انتخاب کنید</div>
+
       <div class="map-container">
         <h2 class="location-heading">لطفا موقعیت مورد نظر خود را روی نقشه مشخص کنید</h2>
         <div class="map-content">
@@ -74,7 +75,12 @@ const sendCoordinates = () => {
     </div>
 
     <!-- Submit Button -->
-    <SubmitButton @click="sendCoordinates" :disabled="isLoading" text="ذخیره آدرس" />
+    <SubmitButton
+      class="submit-button"
+      @click="sendCoordinates"
+      :disabled="isLoading"
+      text="ذخیره آدرس"
+    />
   </section>
 </template>
 
@@ -97,6 +103,7 @@ const sendCoordinates = () => {
   border: none;
   display: flex;
   align-items: center;
+  cursor: pointer;
 }
 
 .arrow-icon {
@@ -122,15 +129,17 @@ const sendCoordinates = () => {
 
 .map-container {
   background-color: var(--color-white);
-  box-shadow: 0 2px 10px gray;
+  box-shadow: 0 2px 10px #b9b9b9;
   width: 100%;
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  border-radius: 4px;
 }
 
 .location-heading {
   font-size: var(--font-size-small);
+  font-weight: var(--font-weight-bold);
   color: var(--color-text);
   padding: var(--spacing-large);
   margin: 0;
@@ -217,6 +226,10 @@ const sendCoordinates = () => {
     height: 80px;
     width: 100%;
   }
+}
+
+.submit-button {
+  z-index: 1000;
 }
 
 @media (min-width: 992px) {

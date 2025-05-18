@@ -260,7 +260,8 @@ const updateCoordinates = async ({ lat, lng }) => {
 }
 
 .form-heading {
-  font-size: 1rem;
+  font-size: var(--font-size-large);
+  font-weight: var(--font-weight-bold);
   color: var(--color-text);
   margin-bottom: var(--spacing-large);
   border-bottom: 1px solid var(--color-border);
@@ -305,8 +306,9 @@ const updateCoordinates = async ({ lat, lng }) => {
 .radio-input {
   margin-left: var(--spacing-small);
   margin-right: var(--spacing-small);
-  accent-color: var(--color-primary);
+  accent-color: #039e89;
 }
+
 .radio-label {
   display: flex;
   align-items: center;
