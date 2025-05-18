@@ -28,6 +28,7 @@ const updateSelectedLocation = ({ lat, lng }) => {
 
 const showError = ref(false)
 
+// send the user location to SubmitAddress
 const sendCoordinates = () => {
   if (location.value.lat && location.value.lng) {
     emit('userLocation', { ...location })

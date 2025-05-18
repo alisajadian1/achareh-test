@@ -7,6 +7,7 @@ const savedAddresses = ref([])
 const error = ref(null)
 const isLoading = ref(true)
 
+// Load the addresses and error handling
 onMounted(async () => {
   try {
     const res = await axios.get('https://stage.achareh.ir/api/karfarmas/address', {

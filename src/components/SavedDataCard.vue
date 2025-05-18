@@ -75,6 +75,7 @@ defineProps({
   border-top: 1px solid rgb(175, 175, 175);
 }
 
+/* Responsive styles */
 @media (min-width: 992px) {
   .data-row {
     display: flex;
