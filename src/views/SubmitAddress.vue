@@ -1,50 +1,84 @@
 <script setup>
-import { computed, reactive, ref } from 'vue'
+import { ref, reactive, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
 
-import {
-  firstError,
-  validateRequiredField,
-  validateLength,
-  validateMobile,
-  validatePhone,
-  validateGender,
-} from '/utils/validation.js'
-
+import BaseInput from '@/components/BaseInput.vue'
 import SubmitButton from '../components/SubmitButton.vue'
 import LocationPicker from '@/components/LocationPicker.vue'
-import BaseInput from '@/components/BaseInput.vue'
+
+import {
+  validatePhone,
+  validateMobile,
+  validateGender,
+  validateLength,
+  firstError,
+  validateRequiredField,
+} from '/utils/validation.js'
 
 const router = useRouter()
-const step = ref(1)
-const submitAttempt = ref(false)
-const isLoading = ref(false)
-
 const form = reactive({
+  gender: '',
   firstName: '',
   lastName: '',
   mobile: '',
   phone: '',
   address: '',
-  gender: '',
 })
 
+const isLoading = ref(false)
+const step = ref(1)
+const submitAttempt = ref(false)
 const coordinates = ref({ lat: null, lng: null })
 
-const updateCoordinates = async ({ lat, lng }) => {
-  coordinates.value = { lat, lng }
-  await submitForm()
+//Form validation
+const errors = computed(() => ({
+  gender: firstError([
+    validateRequiredField(form.gender, 'انتخاب جنسیت الزامی است'),
+    validateGender(form.gender),
+  ]),
+  firstName: firstError([
+    validateRequiredField(form.firstName, 'نام الزامی است'),
+    validateLength(form.firstName, 3, 'نام باید دارای 3 کارکتر باشد'),
+  ]),
+  lastName: firstError([
+    validateRequiredField(form.lastName, 'نام خانوادگی الزامی است'),
+    validateLength(form.lastName, 3, 'نام خانوادگی باید دارای 3 کارکتر باشد'),
+  ]),
+  mobile: firstError([
+    validateRequiredField(form.mobile, 'شماره موبایل الزامی است'),
+    validateLength(form.mobile, 11, 'شماره وارد شده صحیح نمی‌باشد'),
+    validateMobile(form.mobile),
+  ]),
+  phone: firstError([
+    form.phone ? validateLength(form.phone, 11, 'شماره وارد شده صحیح نمی‌باشد') : '',
+    form.phone ? validatePhone(form.phone) : '',
+  ]),
+  address: firstError([
+    validateRequiredField(form.address, 'آدرس الزامی است'),
+    validateLength(form.address, 10, 'آدرس باید دارای 10 کارکتر باشد'),
+  ]),
+}))
+
+const handleSubmit = () => {
+  submitAttempt.value = true
+  const actualErrors = Object.values(errors.value).filter(Boolean)
+  if (actualErrors.length === 0) {
+    step.value = 2
+  } else {
+    console.warn('❌ فرم دارای خطا است', actualErrors)
+  }
 }
 
+// submit the form and and send data to the api
 const submitForm = async () => {
   const payload = {
+    gender: form.gender,
     first_name: form.firstName,
     last_name: form.lastName,
     coordinate_mobile: form.mobile,
     coordinate_phone_number: form.phone,
     address: form.address,
-    gender: form.gender,
     lat: coordinates.value.lat,
     lng: coordinates.value.lng,
     region: 1,
@@ -67,42 +101,9 @@ const submitForm = async () => {
   }
 }
 
-const errors = computed(() => ({
-  firstName: firstError([
-    validateRequiredField(form.firstName, 'نام الزامی است'),
-    validateLength(form.firstName, 3, 'نام باید دارای 3 کارکتر باشد'),
-  ]),
-  lastName: firstError([
-    validateRequiredField(form.lastName, 'نام خانوادگی الزامی است'),
-    validateLength(form.lastName, 3, 'نام خانوادگی باید دارای 3 کارکتر باشد'),
-  ]),
-  mobile: firstError([
-    validateRequiredField(form.mobile, 'شماره موبایل الزامی است'),
-    validateLength(form.mobile, 11, 'شماره وارد شده صحیح نمی‌باشد'),
-    validateMobile(form.mobile),
-  ]),
-  phone: firstError([
-    form.phone ? validateLength(form.phone, 11, 'شماره وارد شده صحیح نمی‌باشد') : '',
-    form.phone ? validatePhone(form.phone) : '',
-  ]),
-  address: firstError([
-    validateRequiredField(form.address, 'آدرس الزامی است'),
-    validateLength(form.address, 10, 'آدرس باید دارای 10 کارکتر باشد'),
-  ]),
-  gender: firstError([
-    validateRequiredField(form.gender, 'انتخاب جنسیت الزامی است'),
-    validateGender(form.gender),
-  ]),
-}))
-
-const handleSubmit = () => {
-  submitAttempt.value = true
-  const actualErrors = Object.values(errors.value).filter(Boolean)
-  if (actualErrors.length === 0) {
-    step.value = 2
-  } else {
-    console.warn('❌ فرم دارای خطا است', actualErrors)
-  }
+const updateCoordinates = async ({ lat, lng }) => {
+  coordinates.value = { lat, lng }
+  await submitForm()
 }
 </script>
 
@@ -151,7 +152,7 @@ const handleSubmit = () => {
 
           <!-- Row 2: phone and Address -->
           <div class="form-row">
-            <!-- Landline Input -->
+            <!-- Phone Input -->
             <BaseInput
               v-model="form.phone"
               id="phone"
@@ -220,7 +221,6 @@ const handleSubmit = () => {
       </div>
       <div class="bottom-spacing"></div>
 
-      <!-- Fixed Submit Button -->
       <SubmitButton @click="handleSubmit"> </SubmitButton>
     </div>
 
@@ -251,7 +251,6 @@ const handleSubmit = () => {
   text-align: right;
 }
 
-/* ===== Form Card Styling ===== */
 .input-data-cart {
   background-color: var(--color-white);
   border-radius: 8px;
@@ -260,7 +259,6 @@ const handleSubmit = () => {
   margin-bottom: var(--spacing-large);
 }
 
-/* ===== Form Section Headings ===== */
 .form-heading {
   font-size: 1rem;
   color: var(--color-text);
@@ -269,7 +267,6 @@ const handleSubmit = () => {
   padding-bottom: var(--spacing-medium);
 }
 
-/* ===== Form Layout and Inputs ===== */
 .form-row {
   display: flex;
   flex-direction: column;
@@ -287,7 +284,6 @@ const handleSubmit = () => {
   flex: 2;
 }
 
-/* ===== Gender Radio Buttons ===== */
 .form-group-radio {
   display: flex;
   flex-direction: row;
@@ -318,12 +314,11 @@ const handleSubmit = () => {
   color: var(--color-text);
 }
 
-/* ===== Spacing for Fixed Button Visibility ===== */
 .bottom-spacing {
-  height: 80px; /* Match height of the fixed SubmitButton component */
+  height: 80px;
 }
 
-/* ===== Responsive Layout (Tablet & Desktop) ===== */
+/* /* Responsive styles (Tablet & Desktop) */
 @media (min-width: 768px) {
   .submit-address {
     padding: var(--spacing-large) 0;
@@ -331,7 +326,7 @@ const handleSubmit = () => {
   }
 
   .form-row {
-    flex-direction: row; /* Arrange inputs side-by-side on wider screens */
+    flex-direction: row;
   }
 
   .input-data-cart {
