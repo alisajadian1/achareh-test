@@ -95,5 +95,7 @@ Here are some ideas for improving the project:
 
 🧠 Credits
 Built by AliSajadian
+
 Design and logic inspired by Achareh technical challenge
+
 Submitted for Ubaar technical test
