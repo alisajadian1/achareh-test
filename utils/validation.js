@@ -8,11 +8,8 @@ export const validateRequiredField = (fieldName, msg) => {
 
 export const validateLength = (fieldName, minChar, msg) => {
   const value = fieldName.replace(/\s+/g, '')
-  if (fieldName === 'mobile' || fieldName === 'phone') {
-    return value.length == minChar ? msg : ''
-  } else {
-    return value.length < minChar ? msg : ''
-  }
+
+  return value.length < minChar ? msg : ''
 }
 
 export function validateMobile(fieldName, msg = 'شماره موبایل معتبر نیست') {
@@ -21,7 +18,7 @@ export function validateMobile(fieldName, msg = 'شماره موبایل معت�
 }
 
 export function validatePhone(fieldName, msg = 'شماره تلفن معتبر نیست') {
-  const pattern = /^0\d{2,3}\d{7,8}$/
+  const pattern = /^0\d{10}$/
   return !fieldName || !pattern.test(fieldName) ? msg : ''
 }
 
